@@ -3,6 +3,8 @@ package com.avinashsinha.pages.pageFactory.katalonCURA;
 import com.avinashsinha.base.CommonToAllPage;
 import com.avinashsinha.utils.PropertiesReader;
 import com.avinashsinha.utils.WaitHelpers;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -10,6 +12,8 @@ import org.openqa.selenium.support.PageFactory;
 
 //This is Page Class
 public class BookingPage_PF extends CommonToAllPage {
+
+    private static final Logger LOGGER = LogManager.getLogger(BookingPage_PF.class);
 
     WebDriver driver;
 
@@ -46,10 +50,13 @@ public class BookingPage_PF extends CommonToAllPage {
     @FindBy(xpath = "//button[@id='btn-book-appointment']")
     private WebElement bookAppointment;
 
-    //Step 2 : These are Page Actions i.e. Kind of Behaviours or Instance Methods or Member Methods
+    private static final int MAX_MONTH_NAVIGATION_ATTEMPTS = 24;
+
+    //Step 2 : These are Page Actions i.e. Kind of Behaviors or Instance Methods or Member Methods
     public void fillAllDetailsOnBookingPage() {
 
         WaitHelpers.urlContains(driver, PropertiesReader.readKey("katalon_bookingURL"));
+        LOGGER.info("Booking Page loaded. Filling out appointment details.");
 
         clickElement(checkBox);
         clickElement(radioButton);
@@ -57,17 +64,28 @@ public class BookingPage_PF extends CommonToAllPage {
 
         WaitHelpers.visibilityOfElement(openCalendar);
 
-        while (!getText(currentMonth).equals("July 2026")) {
+        String targetMonth = PropertiesReader.readKey("katalon_targetMonth");
+        int attempts = 0;
+
+        while (!getText(currentMonth).equals(targetMonth)) {
+
+            if (attempts >= MAX_MONTH_NAVIGATION_ATTEMPTS) {
+                LOGGER.error("Calendar navigation failed: could not reach target month '{}' after {} attempts.", targetMonth, MAX_MONTH_NAVIGATION_ATTEMPTS);
+                break;
+            }
 
             clickElement(next);
-            getText(currentMonth);
+            attempts++;
 
         }
 
         clickElement(day);
+        LOGGER.info("Selected appointment date in month: {}", targetMonth);
 
         enterInput(comment, PropertiesReader.readKey("katalon_comment"));
         clickElement(bookAppointment);
+
+        LOGGER.info("Appointment booking submitted.");
 
     }
 }
