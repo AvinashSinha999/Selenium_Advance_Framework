@@ -2,6 +2,8 @@ package com.avinashsinha.pages.pageFactory.appVWO;
 
 import com.avinashsinha.base.CommonToAllPage;
 import com.avinashsinha.utils.WaitHelpers;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -9,6 +11,8 @@ import org.openqa.selenium.support.PageFactory;
 
 //This is Page Class
 public class DashboardPage_PF extends CommonToAllPage {
+
+    private static final Logger LOGGER = LogManager.getLogger(DashboardPage_PF.class);
 
     WebDriver driver;
 
@@ -18,12 +22,17 @@ public class DashboardPage_PF extends CommonToAllPage {
     }
 
     //Step 1 : These are Page Locators i.e. Kind of Attributes or Instance Variable or Member Variable
-    @FindBy(css="[data-qa='lufexuloga']")
+    @FindBy(css = "[data-qa='lufexuloga']")
     private WebElement userNameOnDashboard;
 
     //Step 2 : These are Page Actions i.e. Kind of Behaviours or Instance Methods or Member Methods
     public String loggedInUserName() {
+
         WaitHelpers.visibilityOfElement(userNameOnDashboard);
-        return getText(userNameOnDashboard);
+        String userName = getText(userNameOnDashboard);
+        LOGGER.info("Logged in username: {}", userName);
+
+        return userName;
+
     }
 }
