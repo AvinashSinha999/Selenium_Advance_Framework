@@ -1,13 +1,16 @@
 package com.avinashsinha.pages.pageObjectModel.katalonCURA;
 
 import com.avinashsinha.base.CommonToAllPage;
-import com.avinashsinha.utils.PropertiesReader;
 import com.avinashsinha.utils.WaitHelpers;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 //This is Page Class
 public class LoginPage extends CommonToAllPage {
+
+    private static final Logger LOGGER = LogManager.getLogger(LoginPage.class);
 
     WebDriver driver;
 
@@ -21,13 +24,16 @@ public class LoginPage extends CommonToAllPage {
     private static final By LOGIN_BUTTON = By.id("btn-login");
 
     //Step 2 : These are Page Actions i.e. Kind of Behaviors or Instance Methods or Member Methods
-    public void loginToKatalonCURACreds() {
+    public void loginToKatalonCURACreds(String usr, String pwd) {
 
-        WaitHelpers.urlContains(driver,PropertiesReader.readKey("katalon_loginURL"));
+        WaitHelpers.presenceOfElement(driver, USERNAME);
+        LOGGER.info("Login form loaded. Entering credentials for user: {}", usr);
 
-        enterInput(USERNAME, PropertiesReader.readKey("katalon_username"));
-        enterInput(PASSWORD, PropertiesReader.readKey("katalon_password"));
+        enterInput(USERNAME, usr);
+        enterInput(PASSWORD, pwd);
         clickElement(LOGIN_BUTTON);
+
+        LOGGER.info("Login submitted for user: {}", usr);
 
     }
 
