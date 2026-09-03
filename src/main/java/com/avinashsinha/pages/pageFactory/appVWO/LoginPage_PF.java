@@ -3,6 +3,8 @@ package com.avinashsinha.pages.pageFactory.appVWO;
 import com.avinashsinha.base.CommonToAllPage;
 import com.avinashsinha.utils.PropertiesReader;
 import com.avinashsinha.utils.WaitHelpers;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -10,6 +12,8 @@ import org.openqa.selenium.support.PageFactory;
 
 //This is Page Class
 public class LoginPage_PF extends CommonToAllPage {
+
+    private static final Logger LOGGER = LogManager.getLogger(LoginPage_PF.class);
 
     WebDriver driver;
 
@@ -48,7 +52,8 @@ public class LoginPage_PF extends CommonToAllPage {
 
         openVWOUrl();
 
-        WaitHelpers.waitImplicitWait(driver,5);
+        WaitHelpers.visibilityOfElement(username);
+        LOGGER.info("Login form loaded. Attempting login with invalid credentials.");
 
         enterInput(username, PropertiesReader.readKey("invalid_username"));
         enterInput(password, PropertiesReader.readKey("invalid_password"));
@@ -56,7 +61,10 @@ public class LoginPage_PF extends CommonToAllPage {
 
         WaitHelpers.checkVisibilityOfAndTextToBePresentInElement(driver, errorMessage);
 
-        return getText(errorMessage);
+        String errorText = getText(errorMessage);
+        LOGGER.info("Error message displayed: {}", errorText);
+
+        return errorText;
 
     }
 
@@ -64,11 +72,14 @@ public class LoginPage_PF extends CommonToAllPage {
 
         openVWOUrl();
 
-        WaitHelpers.waitImplicitWait(driver,5);
+        WaitHelpers.visibilityOfElement(username);
+        LOGGER.info("Login form loaded. Attempting login with valid credentials.");
 
         enterInput(username, PropertiesReader.readKey("username"));
         enterInput(password, PropertiesReader.readKey("password"));
         clickElement(signButton);
+
+        LOGGER.info("Login submitted.");
 
     }
 
