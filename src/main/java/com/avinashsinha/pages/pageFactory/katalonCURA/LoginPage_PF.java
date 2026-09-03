@@ -3,6 +3,8 @@ package com.avinashsinha.pages.pageFactory.katalonCURA;
 import com.avinashsinha.base.CommonToAllPage;
 import com.avinashsinha.utils.PropertiesReader;
 import com.avinashsinha.utils.WaitHelpers;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -10,6 +12,8 @@ import org.openqa.selenium.support.PageFactory;
 
 //This is Page Class
 public class LoginPage_PF extends CommonToAllPage {
+
+    private static final Logger LOGGER = LogManager.getLogger(LoginPage_PF.class);
 
     WebDriver driver;
 
@@ -32,10 +36,15 @@ public class LoginPage_PF extends CommonToAllPage {
     public void loginToKatalonCURACreds() {
 
         WaitHelpers.urlContains(driver, PropertiesReader.readKey("katalon_loginURL"));
+        WaitHelpers.visibilityOfElement(username);
+
+        LOGGER.info("Login form loaded. Entering credentials.");
 
         enterInput(username, PropertiesReader.readKey("katalon_username"));
         enterInput(password, PropertiesReader.readKey("katalon_password"));
         clickElement(loginButton);
+
+        LOGGER.info("Login submitted.");
 
     }
 
