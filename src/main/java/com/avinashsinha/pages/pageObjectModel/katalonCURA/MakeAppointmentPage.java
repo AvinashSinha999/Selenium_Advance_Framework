@@ -1,11 +1,16 @@
 package com.avinashsinha.pages.pageObjectModel.katalonCURA;
 
 import com.avinashsinha.base.CommonToAllPage;
+import com.avinashsinha.utils.WaitHelpers;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 //This is Page Class
 public class MakeAppointmentPage extends CommonToAllPage {
+
+    private static final Logger LOGGER = LogManager.getLogger(MakeAppointmentPage.class);
 
     WebDriver driver;
 
@@ -21,7 +26,12 @@ public class MakeAppointmentPage extends CommonToAllPage {
 
         openKatalonCURAUrl();
 
+        WaitHelpers.presenceOfElement(driver, MAKE_APPOINTMENT);
+        LOGGER.info("Katalon CURA homepage loaded. Clicking Make Appointment button.");
+
         clickElement(MAKE_APPOINTMENT);
+
+        LOGGER.info("Make Appointment button clicked.");
 
     }
 
