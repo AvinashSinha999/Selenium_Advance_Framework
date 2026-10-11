@@ -3,6 +3,8 @@ package com.avinashsinha.pages.pageFactory.katalonCURA;
 import com.avinashsinha.base.CommonToAllPage;
 import com.avinashsinha.utils.PropertiesReader;
 import com.avinashsinha.utils.WaitHelpers;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -10,6 +12,8 @@ import org.openqa.selenium.support.PageFactory;
 
 //This is Page Class
 public class SummaryPage_PF extends CommonToAllPage {
+
+    private static final Logger LOGGER = LogManager.getLogger(SummaryPage_PF.class);
 
     WebDriver driver;
 
@@ -29,24 +33,31 @@ public class SummaryPage_PF extends CommonToAllPage {
     private WebElement logout;
 
     //Step 2 : These are Page Actions i.e. Kind of Behaviours or Instance Methods or Member Methods
-    public void checkAllDetailsOnSummaryPage() {
+    public boolean checkAllDetailsOnSummaryPage() {
 
         WaitHelpers.urlContains(driver, PropertiesReader.readKey("katalon_summaryURL"));
 
-        if (getText(commentText).equals(PropertiesReader.readKey("katalon_comment"))) {
+        String actualComment = getText(commentText);
+        boolean isCommentMatching = actualComment.equals(PropertiesReader.readKey("katalon_comment"));
 
-            clickElement(sideBar);
-            clickElement(logout);
-
-            WaitHelpers.urlContains(driver, PropertiesReader.readKey("katalon_makeAppointmentURL"));
-
-            System.out.println("\nTest Case is Passed\n");
-
+        if (isCommentMatching) {
+            LOGGER.info("Summary Page verified. Comment matches expected value.");
         } else {
-
-            System.out.println("\nTest Case is Failed");
+            LOGGER.error("Summary Page Failed: expected '{}', actual '{}'",
+                    PropertiesReader.readKey("katalon_comment"), actualComment);
         }
+
+        return isCommentMatching;
 
     }
 
+    public void logout() {
+
+        clickElement(sideBar);
+        clickElement(logout);
+
+        WaitHelpers.urlContains(driver, PropertiesReader.readKey("katalon_makeAppointmentURL"));
+        LOGGER.info("Logged out successfully, returned to Make Appointment page.");
+
+    }
 }
