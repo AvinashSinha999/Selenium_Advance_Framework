@@ -50,3 +50,8 @@
 2026-06-20 22:40:02 INFO  LoginPage_PF - Login submitted.
 2026-06-20 22:40:02 INFO  EmployeeListHomePage_PF - Dashboard Page Title: Dashboard
 2026-06-20 22:40:02 INFO  TestOrangHRMLoginPage_PF - Finishing the TestCases Page Factory
+2026-10-21 22:05:54 INFO  TestOrangHRMLoginPage_PF - Starting the TestCases Page Factory
+2026-10-21 22:05:59 INFO  LoginPage_PF - Login form loaded. Entering credentials.
+2026-10-21 22:06:04 INFO  LoginPage_PF - Login submitted.
+2026-10-21 22:06:04 INFO  EmployeeListHomePage_PF - Dashboard Page Title: Dashboard
+2026-10-21 22:06:04 INFO  TestOrangHRMLoginPage_PF - Finishing the TestCases Page Factory
