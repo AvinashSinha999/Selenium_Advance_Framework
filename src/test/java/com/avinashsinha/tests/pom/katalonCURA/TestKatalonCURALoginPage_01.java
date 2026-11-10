@@ -7,10 +7,12 @@ import com.avinashsinha.pages.pageObjectModel.katalonCURA.BookingPage;
 import com.avinashsinha.pages.pageObjectModel.katalonCURA.LoginPage;
 import com.avinashsinha.pages.pageObjectModel.katalonCURA.MakeAppointmentPage;
 import com.avinashsinha.pages.pageObjectModel.katalonCURA.SummaryPage;
+import com.avinashsinha.utils.PropertiesReader;
 import io.qameta.allure.Description;
 import io.qameta.allure.Owner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.testng.Assert;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
@@ -33,15 +35,20 @@ public class TestKatalonCURALoginPage_01 extends CommonToAllTest {
         makeAppointmentKatalonCURA.clickToMakeAppointmentBtn();
 
         LoginPage loginPage = new LoginPage(getDriver());
-        loginPage.loginToKatalonCURACreds();
+        loginPage.loginToKatalonCURACreds(PropertiesReader.readKey("katalon_username"), PropertiesReader.readKey("katalon_password"));
 
         BookingPage bookingPage = new BookingPage(getDriver());
         bookingPage.fillAllDetailsOnBookingPage();
 
+
         SummaryPage summaryPage = new SummaryPage(getDriver());
-        summaryPage.checkAllDetailsOnSummaryPage();
+        boolean isSummaryValid = summaryPage.checkAllDetailsOnSummaryPage();
+        Assert.assertTrue(isSummaryValid, "Summary Page details did not match expected booking data.");
+
+        summaryPage.logout();
 
         LOGGER.info("Finishing the TestCases Page Object Model");
+
 
     }
 
